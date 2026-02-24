@@ -1,1 +1,37 @@
 @import "tailwindcss";
+
+@layer base {
+  /* Light mode (default) */
+  :root {
+    --bg-primary: 249 250 251;
+    --bg-secondary: 255 255 255;
+    --text-primary: 31 41 55;
+    --text-secondary: 75 85 99;
+    --border: 229 231 235;
+  }
+
+  /* Dark mode */
+  .dark {
+    --bg-primary: 17 24 39;
+    --bg-secondary: 31 41 55;
+    --text-primary: 243 244 246;
+    --text-secondary: 209 213 219;
+    --border: 55 65 81;
+  }
+}
+
+/* Custom animations */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fadeIn {
+  animation: fadeIn 0.3s ease-in-out;
+}

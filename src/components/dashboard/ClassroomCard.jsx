@@ -1,6 +1,9 @@
-import { useState } from "react";
+import { useState } from 'react';
+import { useLocalStorage } from '../../hooks/useLocalStorage';
+import { formatTemperature } from '../../utils/temperature';
 import Card from "../common/Card";
 import Badge from "../common/Badge";
+import RoomDetailsModal from './RoomDetailsModal';
 
 const comfortConfig = {
   comfortable: { variant: "success", label: "😊 Comfortable", icon: "✅" },
@@ -8,55 +11,62 @@ const comfortConfig = {
   hot: { variant: "danger", label: "🥵 Hot", icon: "🔥" },
 };
 
-const ClassroomCard = ({ classroom, onSelect }) => {
+const ClassroomCard = ({ classroom }) => {
+  const [showDetails, setShowDetails] = useState(false);
   const { id, name, temperature, humidity, comfort } = classroom;
-  const [expanded, setExpanded] = useState(false);
   const config = comfortConfig[comfort] || comfortConfig.comfortable;
+  
+  const [preferences] = useLocalStorage('comfortcheck_preferences', {
+    temperatureUnit: 'celsius',
+  });
+
+  const handleClick = () => {
+    console.log('Card clicked!', name);
+    setShowDetails(true);
+  };
+
+  const handleClose = () => {
+    console.log('Closing modal');
+    setShowDetails(false);
+  };
 
   return (
-    <Card 
-      className="hover:border-blue-400 transition-all cursor-pointer"
-      onClick={() => {
-        setExpanded(!expanded);
-        onSelect?.(classroom);
-      }}
-    >
-      <div className="flex justify-between items-start">
-        <h3 className="text-lg font-bold">{name}</h3>
-        <Badge variant={config.variant} size="sm">
-          {config.icon} {config.label}
-        </Badge>
-      </div>
-      
-      <div className="mt-3 space-y-2">
-        <div className="flex justify-between items-center">
-          <span className="text-gray-600">🌡️ Temperature</span>
-          <span className="font-medium">{temperature}°C</span>
-        </div>
-        <div className="flex justify-between items-center">
-          <span className="text-gray-600">💧 Humidity</span>
-          <span className="font-medium">{humidity}%</span>
+    <>
+      <Card 
+        onClick={handleClick}
+        className="dark:bg-gray-800"
+      >
+        <div className="flex justify-between items-start">
+          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{name}</h3>
+          <Badge variant={config.variant} size="sm">
+            {config.icon} {config.label}
+          </Badge>
         </div>
         
-        {/* Interactive expanded section */}
-        {expanded && (
-          <div className="mt-3 pt-3 border-t border-gray-200 animate-fadeIn">
-            <p className="text-sm text-gray-600 mb-2">Quick Actions:</p>
-            <div className="flex gap-2">
-              <Badge variant="info" size="sm" className="cursor-pointer hover:opacity-80">
-                📊 Details
-              </Badge>
-              <Badge variant="default" size="sm" className="cursor-pointer hover:opacity-80">
-                ⏰ History
-              </Badge>
-              <Badge variant="default" size="sm" className="cursor-pointer hover:opacity-80">
-                🔔 Alert
-              </Badge>
-            </div>
+        <div className="mt-3 space-y-2">
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600 dark:text-gray-400">🌡️ Temperature</span>
+            <span className="font-medium text-gray-900 dark:text-gray-100">
+              {formatTemperature(temperature, preferences.temperatureUnit)}
+            </span>
           </div>
-        )}
-      </div>
-    </Card>
+          <div className="flex justify-between items-center">
+            <span className="text-gray-600 dark:text-gray-400">💧 Humidity</span>
+            <span className="font-medium text-gray-900 dark:text-gray-100">{humidity}%</span>
+          </div>
+          
+          <div className="mt-2 text-xs text-blue-600 dark:text-blue-400 text-right">
+            Click for details →
+          </div>
+        </div>
+      </Card>
+
+      <RoomDetailsModal 
+        room={classroom}
+        isOpen={showDetails}
+        onClose={handleClose}
+      />
+    </>
   );
 };
 

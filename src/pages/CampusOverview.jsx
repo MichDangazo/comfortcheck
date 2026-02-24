@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { useLocalStorage } from '../hooks/useLocalStorage';
 import Header from "../components/layout/Header";
 import SummaryStats from "../components/dashboard/SummaryStats";
 import ClassroomCard from "../components/dashboard/ClassroomCard";
@@ -12,6 +13,12 @@ const CampusOverview = () => {
   const [lastUpdated, setLastUpdated] = useState(new Date());
   const [selectedFilter, setSelectedFilter] = useState("all");
   const [autoRefresh, setAutoRefresh] = useState(true);
+  
+  // Get preferences from local storage
+  const [preferences] = useLocalStorage('comfortcheck_preferences', {
+    refreshInterval: 10,
+    temperatureUnit: 'celsius',
+  });
 
   // Initial load
   useEffect(() => {
@@ -20,7 +27,7 @@ const CampusOverview = () => {
     setFilteredClassrooms(data);
   }, []);
 
-  // Auto-refresh every 10 seconds
+  // Auto-refresh based on preferences
   useEffect(() => {
     if (!autoRefresh) return;
     
@@ -28,10 +35,10 @@ const CampusOverview = () => {
       const newData = generateLiveData();
       setClassrooms(newData);
       setLastUpdated(new Date());
-    }, 10000);
+    }, preferences.refreshInterval * 1000); // Use preference
     
     return () => clearInterval(interval);
-  }, [autoRefresh]);
+  }, [autoRefresh, preferences.refreshInterval]);
 
   // Apply filter when classrooms or selectedFilter changes
   useEffect(() => {
@@ -65,12 +72,6 @@ const CampusOverview = () => {
     setSelectedFilter(selectedFilter === filter ? "all" : filter);
   };
 
-  // Handle classroom selection
-  const handleClassroomSelect = (classroom) => {
-    console.log("Selected classroom:", classroom);
-    // You can navigate to details page, show modal, etc.
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 p-6">
       <Header 
@@ -80,7 +81,7 @@ const CampusOverview = () => {
         userRole="Facility Manager"
       />
 
-      {/* Auto-refresh toggle (interactive) */}
+      {/* Auto-refresh toggle */}
       <div className="mb-4 flex items-center gap-2">
         <Button
           variant={autoRefresh ? "success" : "outline"}
@@ -94,6 +95,9 @@ const CampusOverview = () => {
             Clear Filter ✕
           </Button>
         )}
+        <span className="text-xs text-gray-500 ml-2">
+          (Interval: {preferences.refreshInterval}s)
+        </span>
       </div>
 
       <SummaryStats counts={counts} onStatClick={handleStatClick} />
@@ -111,7 +115,6 @@ const CampusOverview = () => {
           <ClassroomCard 
             key={room.id} 
             classroom={room}
-            onSelect={handleClassroomSelect}
           />
         ))}
       </div>
