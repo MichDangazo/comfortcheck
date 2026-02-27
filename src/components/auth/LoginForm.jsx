@@ -313,15 +313,15 @@ const LoginForm = ({ onSuccess }) => {
             <div className="grid grid-cols-3 gap-4 text-sm">
               <div className="text-center p-3 bg-amber-50 rounded-lg border border-amber-200">
                 <p className="font-medium text-amber-800">Admin</p>
-                <p className="text-amber-600 text-xs mt-1">admin@</p>
+                <p className="text-amber-600 text-xs mt-1">admin@comfortcheck</p>
               </div>
               <div className="text-center p-3 bg-amber-50 rounded-lg border border-amber-200">
                 <p className="font-medium text-amber-800">Manager</p>
-                <p className="text-amber-600 text-xs mt-1">manager@</p>
+                <p className="text-amber-600 text-xs mt-1">manager@comfortcheck</p>
               </div>
               <div className="text-center p-3 bg-amber-50 rounded-lg border border-amber-200">
                 <p className="font-medium text-amber-800">Teacher</p>
-                <p className="text-amber-600 text-xs mt-1">teacher@</p>
+                <p className="text-amber-600 text-xs mt-1">teacher@comfortcheck</p>
               </div>
             </div>
           </div>
