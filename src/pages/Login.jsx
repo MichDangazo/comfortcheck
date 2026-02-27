@@ -60,37 +60,33 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f5ebe0]">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-[#e8dcd2]">
+      <div className="bg-[#f3f3f3] rounded-xl shadow-md p-10 w-full max-w-md">
         {/* Icon */}
-        <div className="flex justify-center mb-4">
-          <div className="bg-[#FF4500] rounded-full w-16 h-16 flex items-center justify-center">
-            <svg 
-              className="w-8 h-8 text-white" 
-              fill="none" 
-              stroke="currentColor" 
+        <div className="flex justify-center mb-6">
+          <div className="bg-[#FF4B00] rounded-full w-16 h-16 flex items-center justify-center shadow">
+            <svg
+              className="w-8 h-8 text-white"
+              fill="none"
+              stroke="currentColor"
               viewBox="0 0 24 24"
             >
-              <path 
-                strokeLinecap="round" 
-                strokeLinejoin="round" 
-                strokeWidth={2} 
-                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z" 
+              <path
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M14 14.76V5a2 2 0 10-4 0v9.76a4 4 0 104 0z"
               />
-              <circle cx="12" cy="8" r="2" fill="currentColor" />
-              <rect x="11" y="8" width="2" height="8" fill="currentColor" />
             </svg>
           </div>
         </div>
 
-        <h1 className="text-center text-2xl font-semibold text-gray-800 mb-1">
+        <h1 className="text-center text-3xl font-semibold text-orange-800 tracking-wide">
           Classroom Heat Monitor
         </h1>
-        <p className="text-center text-sm text-gray-500 mb-6">
+        <p className="text-center text-sm text-gray-500 mb-8">
           Real-time temperature monitoring system
         </p>
-
-        <h2 className="text-xl font-semibold text-center text-gray-800 mb-8">Welcome Back</h2>
 
         <form onSubmit={handleSubmit} className="space-y-4">
           {/* Email Input */}
@@ -107,7 +103,7 @@ const Login = () => {
                 name="email"
                 value={email}
                 onChange={handleInputChange}
-                className={`w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-transparent ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full pl-10 pr-4 py-2 border rounded-lg bg-white focus:outline-none focus:ring-2 focus:ring-[#FF4B00] focus:border-transparent ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
                 placeholder="your@email.com"
                 disabled={isLoading}
               />
@@ -157,7 +153,7 @@ const Login = () => {
 
           <button
             type="submit"
-            className={`w-full bg-[#FF4500] text-white py-2 px-4 rounded-md font-medium hover:bg-[#E63E00] transition-colors flex items-center justify-center ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+            className={`w-full bg-[#FF4B00] text-white py-3 px-4 rounded-lg font-semibold hover:bg-[#e63f00] transition-all duration-200 flex items-center justify-center ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
             disabled={isLoading}
           >
             {isLoading ? (

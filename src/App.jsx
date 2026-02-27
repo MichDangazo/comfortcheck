@@ -20,7 +20,7 @@ const LoginPage = () => {
   }
   
   return (
-    <div className="min-h-screen bg-gray-50 dark:bg-gray-900 flex items-center justify-center p-4 transition-colors">
+    <div className="min-h-screen bg-amber-50 flex items-center justify-center p-4 transition-colors">
       <LoginForm />
     </div>
   );

@@ -3,7 +3,6 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useNotifications } from '../../contexts/NotificationContext';
 import Input from '../common/Input';
 import Button from '../common/Button';
-import Card from '../common/Card';
 
 const LoginForm = ({ onSuccess }) => {
   const { login, loading } = useAuth();
@@ -13,28 +12,30 @@ const LoginForm = ({ onSuccess }) => {
   const [formData, setFormData] = useState({
     email: '',
     password: '',
-    rememberMe: false,
+    name: '', // For signup
+    confirmPassword: '', // For signup
   });
   
   const [errors, setErrors] = useState({});
   const [showPassword, setShowPassword] = useState(false);
+  const [isLogin, setIsLogin] = useState(true); // Toggle between login and signup
+  const [showMobileMessage, setShowMobileMessage] = useState(false);
 
-  // Handle input changes - controlled component
+  // Handle input changes
   const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
+    const { name, value } = e.target;
     setFormData(prev => ({
       ...prev,
-      [name]: type === 'checkbox' ? checked : value,
+      [name]: value,
     }));
     
-    // Clear error for this field when user starts typing
     if (errors[name]) {
       setErrors(prev => ({ ...prev, [name]: '' }));
     }
   };
 
-  // Validate form
-  const validateForm = () => {
+  // Validate login form
+  const validateLogin = () => {
     const newErrors = {};
     
     if (!formData.email) {
@@ -52,11 +53,40 @@ const LoginForm = ({ onSuccess }) => {
     return newErrors;
   };
 
-  // Handle form submission
-  const handleSubmit = async (e) => {
+  // Validate signup form
+  const validateSignup = () => {
+    const newErrors = {};
+    
+    if (!formData.name) {
+      newErrors.name = 'Name is required';
+    }
+    
+    if (!formData.email) {
+      newErrors.email = 'Email is required';
+    } else if (!/\S+@\S+\.\S+/.test(formData.email)) {
+      newErrors.email = 'Email is invalid';
+    }
+    
+    if (!formData.password) {
+      newErrors.password = 'Password is required';
+    } else if (formData.password.length < 6) {
+      newErrors.password = 'Password must be at least 6 characters';
+    }
+    
+    if (!formData.confirmPassword) {
+      newErrors.confirmPassword = 'Please confirm your password';
+    } else if (formData.password !== formData.confirmPassword) {
+      newErrors.confirmPassword = 'Passwords do not match';
+    }
+    
+    return newErrors;
+  };
+
+  // Handle login submission
+  const handleLogin = async (e) => {
     e.preventDefault();
     
-    const newErrors = validateForm();
+    const newErrors = validateLogin();
     if (Object.keys(newErrors).length > 0) {
       setErrors(newErrors);
       return;
@@ -82,89 +112,222 @@ const LoginForm = ({ onSuccess }) => {
     }
   };
 
+  // Handle signup submission
+  const handleSignup = async (e) => {
+    e.preventDefault();
+    
+    const newErrors = validateSignup();
+    if (Object.keys(newErrors).length > 0) {
+      setErrors(newErrors);
+      return;
+    }
+
+    // Simulate signup - in a real app, this would call an API
+    addNotification({
+      type: 'success',
+      message: 'Account created successfully! You can now log in.',
+    });
+    
+    // Switch to login tab after successful signup
+    setIsLogin(true);
+    setFormData({
+      email: formData.email,
+      password: '',
+      name: '',
+      confirmPassword: '',
+    });
+  };
+
+  // Handle mobile app button
+  const handleMobileApp = () => {
+    setShowMobileMessage(true);
+    addNotification({
+      type: 'info',
+      message: '📱 Mobile app is under development. Coming soon!',
+      duration: 5000,
+    });
+    
+    // Hide message after 5 seconds
+    setTimeout(() => setShowMobileMessage(false), 5000);
+  };
+
   return (
-    <Card className="max-w-md mx-auto">
-      <h2 className="text-2xl font-bold text-center mb-6">Login to ComfortCheck</h2>
-      
-      <form onSubmit={handleSubmit}>
-        {errors.form && (
-          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
-            {errors.form}
-          </div>
-        )}
-        
-        <Input
-          label="Email"
-          type="email"
-          name="email"
-          value={formData.email}
-          onChange={handleChange}
-          error={errors.email}
-          placeholder="Enter your email"
-          required
-          autoComplete="email"
-        />
-        
-        <div className="relative">
-          <Input
-            label="Password"
-            type={showPassword ? 'text' : 'password'}
-            name="password"
-            value={formData.password}
-            onChange={handleChange}
-            error={errors.password}
-            placeholder="Enter your password"
-            required
-            autoComplete="current-password"
+    <div className="min-h-screen bg-amber-50 flex items-center justify-center p-4">
+      <div className="w-full max-w-2xl"> {/* Increased to max-w-2xl for wider card */}
+        {/* Header with Logo */}
+        <div className="text-center mb-8">
+          <img 
+            src="/src/assets/logo.png" 
+            alt="Classroom Heat Monitor Logo"
+            className="mx-auto mb-4 max-w-full h-auto"
+            style={{ maxHeight: '510px' }} // Adjust size as needed
           />
-          <button
-            type="button"
-            onClick={() => setShowPassword(!showPassword)}
-            className="absolute right-3 top-9 text-gray-500 hover:text-gray-700"
-          >
-            {showPassword ? '👁️' : '👁️‍🗨️'}
-          </button>
         </div>
-        
-        <div className="flex items-center justify-between mb-6">
-          <label className="flex items-center">
-            <input
-              type="checkbox"
-              name="rememberMe"
-              checked={formData.rememberMe}
-              onChange={handleChange}
-              className="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50"
-            />
-            <span className="ml-2 text-sm text-gray-600">Remember me</span>
-          </label>
-          
-          <button
-            type="button"
-            className="text-sm text-blue-600 hover:text-blue-800"
-          >
-            Forgot password?
-          </button>
+
+        {/* Login/Signup Card */}
+        <div className="bg-white rounded-2xl shadow-xl p-10 border border-amber-200">
+          {/* Tabs */}
+          <div className="flex mb-8 border-b border-amber-200">
+            <button
+              onClick={() => setIsLogin(true)}
+              className={`flex-1 pb-4 text-center font-medium text-lg transition-colors ${
+                isLogin
+                  ? 'text-orange-600 border-b-2 border-orange-500'
+                  : 'text-amber-600 hover:text-orange-600'
+              }`}
+            >
+              Login
+            </button>
+            <button
+              onClick={() => setIsLogin(false)}
+              className={`flex-1 pb-4 text-center font-medium text-lg transition-colors ${
+                !isLogin
+                  ? 'text-orange-600 border-b-2 border-orange-500'
+                  : 'text-amber-600 hover:text-orange-600'
+              }`}
+            >
+              Sign up
+            </button>
+          </div>
+
+          {/* Form */}
+          <form onSubmit={isLogin ? handleLogin : handleSignup} className="space-y-6">
+            {errors.form && (
+              <div className="p-3 bg-red-100 border border-red-400 text-red-700 rounded-lg text-sm">
+                {errors.form}
+              </div>
+            )}
+
+            {/* Signup Fields */}
+            {!isLogin && (
+              <div>
+                <label className="block text-sm font-medium text-amber-800 mb-2">
+                  Full Name
+                </label>
+                <Input
+                  type="text"
+                  name="name"
+                  value={formData.name}
+                  onChange={handleChange}
+                  error={errors.name}
+                  placeholder="Enter your full name"
+                  className="w-full border-amber-300 focus:border-orange-500 focus:ring-orange-500"
+                />
+              </div>
+            )}
+
+            {/* Email Field */}
+            <div>
+              <label className="block text-sm font-medium text-amber-800 mb-2">
+                Email
+              </label>
+              <Input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleChange}
+                error={errors.email}
+                placeholder="Enter your email"
+                className="w-full border-amber-300 focus:border-orange-500 focus:ring-orange-500"
+              />
+            </div>
+
+            {/* Password Field */}
+            <div>
+              <label className="block text-sm font-medium text-amber-800 mb-2">
+                Password
+              </label>
+              <div className="relative">
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleChange}
+                  error={errors.password}
+                  placeholder="Enter your password"
+                  className="w-full pr-10 border-amber-300 focus:border-orange-500 focus:ring-orange-500"
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className="absolute right-3 top-1/2 transform -translate-y-1/2 text-amber-600 hover:text-orange-600"
+                >
+                  {showPassword ? '👁️' : '👁️‍🗨️'}
+                </button>
+              </div>
+            </div>
+
+            {/* Confirm Password (Signup only) */}
+            {!isLogin && (
+              <div>
+                <label className="block text-sm font-medium text-amber-800 mb-2">
+                  Confirm Password
+                </label>
+                <Input
+                  type={showPassword ? 'text' : 'password'}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleChange}
+                  error={errors.confirmPassword}
+                  placeholder="Confirm your password"
+                  className="w-full border-amber-300 focus:border-orange-500 focus:ring-orange-500"
+                />
+              </div>
+            )}
+
+            {/* Mobile App Button with Message Below */}
+            <div className="relative">
+              <button
+                type="button"
+                onClick={handleMobileApp}
+                className="w-full py-4 px-4 bg-amber-100 hover:bg-amber-200 text-amber-800 font-medium rounded-lg transition-colors border border-amber-300 text-lg"
+              >
+                📱 Student & Instructor (Mobile Only)
+              </button>
+              
+              {/* Under Development Message - Below the button */}
+              {showMobileMessage && (
+                <div className="mt-3 p-4 bg-amber-100 border border-amber-300 rounded-lg text-base text-amber-800 animate-fadeIn text-center">
+                  🚧 Mobile app is under development. Coming soon!
+                </div>
+              )}
+            </div>
+
+            {/* Submit Button */}
+            <Button
+              type="submit"
+              variant="primary"
+              size="lg"
+              className="w-full bg-gradient-to-r from-amber-600 to-orange-600 hover:from-amber-700 hover:to-orange-700 text-white font-semibold py-4 rounded-lg transition-all shadow-md hover:shadow-lg text-lg"
+              disabled={loading}
+            >
+              {loading ? 'Processing...' : (isLogin ? 'Login' : 'Create Account')}
+            </Button>
+          </form>
+
+          {/* Demo Credentials */}
+          <div className="mt-8 pt-6 border-t border-amber-200">
+            <p className="text-sm text-amber-600 text-center mb-4">
+              Demo Credentials
+            </p>
+            <div className="grid grid-cols-3 gap-4 text-sm">
+              <div className="text-center p-3 bg-amber-50 rounded-lg border border-amber-200">
+                <p className="font-medium text-amber-800">Admin</p>
+                <p className="text-amber-600 text-xs mt-1">admin@</p>
+              </div>
+              <div className="text-center p-3 bg-amber-50 rounded-lg border border-amber-200">
+                <p className="font-medium text-amber-800">Manager</p>
+                <p className="text-amber-600 text-xs mt-1">manager@</p>
+              </div>
+              <div className="text-center p-3 bg-amber-50 rounded-lg border border-amber-200">
+                <p className="font-medium text-amber-800">Teacher</p>
+                <p className="text-amber-600 text-xs mt-1">teacher@</p>
+              </div>
+            </div>
+          </div>
         </div>
-        
-        <Button
-          type="submit"
-          variant="primary"
-          size="lg"
-          className="w-full"
-          disabled={loading}
-        >
-          {loading ? 'Logging in...' : 'Login'}
-        </Button>
-      </form>
-      
-      {/* Demo credentials */}
-      <div className="mt-6 p-4 bg-gray-50 rounded-lg text-sm">
-        <p className="font-medium text-gray-700 mb-2">Demo Credentials:</p>
-        <p className="text-gray-600">Admin: admin@comfortcheck.com / admin123</p>
-        <p className="text-gray-600">Manager: manager@comfortcheck.com / manager123</p>
-        <p className="text-gray-600">Teacher: teacher@comfortcheck.com / teacher123</p>
       </div>
-    </Card>
+    </div>
   );
 };
 

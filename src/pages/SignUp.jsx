@@ -80,12 +80,12 @@ const SignUp = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-[#f5ebe0]">
-      <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
+    <div className="min-h-screen flex items-center justify-center bg-[#e8dcd2]">
+      <div className="bg-[#f3f3f3] rounded-xl shadow-md p-10 w-full max-w-md">
         <div className="flex items-center mb-6">
           <button
             onClick={() => navigate(-1)}
-            className="mr-4 text-gray-600 hover:text-[#FF4500] transition-colors"
+            className="mr-4 text-gray-600 hover:text-[#FF4B00] transition-colors"
           >
             <FiArrowLeft className="h-5 w-5" />
           </button>
@@ -107,7 +107,7 @@ const SignUp = () => {
                 name="name"
                 value={formData.name}
                 onChange={handleInputChange}
-                className={`w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-transparent ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF4B00] focus:border-transparent ${errors.name ? 'border-red-500' : 'border-gray-300'}`}
                 placeholder="John Doe"
                 disabled={isLoading}
               />
@@ -129,7 +129,7 @@ const SignUp = () => {
                 name="email"
                 value={formData.email}
                 onChange={handleInputChange}
-                className={`w-full pl-10 pr-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-transparent ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF4B00] focus:border-transparent ${errors.email ? 'border-red-500' : 'border-gray-300'}`}
                 placeholder="your@email.com"
                 disabled={isLoading}
               />
@@ -151,7 +151,7 @@ const SignUp = () => {
                 name="password"
                 value={formData.password}
                 onChange={handleInputChange}
-                className={`w-full pl-10 pr-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-transparent ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF4B00] focus:border-transparent ${errors.password ? 'border-red-500' : 'border-gray-300'}`}
                 placeholder="••••••••"
                 disabled={isLoading}
               />
@@ -185,7 +185,7 @@ const SignUp = () => {
                 name="confirmPassword"
                 value={formData.confirmPassword}
                 onChange={handleInputChange}
-                className={`w-full pl-10 pr-10 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-[#FF4500] focus:border-transparent ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
+                className={`w-full pl-10 pr-10 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#FF4B00] focus:border-transparent ${errors.confirmPassword ? 'border-red-500' : 'border-gray-300'}`}
                 placeholder="••••••••"
                 disabled={isLoading}
               />
@@ -194,14 +194,14 @@ const SignUp = () => {
           </div>
 
           {errors.submit && (
-            <div className="p-3 bg-red-50 text-red-700 text-sm rounded-md">
+            <div className="p-3 bg-red-50 text-red-700 text-sm rounded-lg">
               {errors.submit}
             </div>
           )}
 
           <button
             type="submit"
-            className={`w-full bg-[#FF4500] text-white py-2 px-4 rounded-md font-medium hover:bg-[#E63E00] transition-colors flex items-center justify-center ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
+            className={`w-full bg-[#FF4500] text-white py-2 px-4 rounded-lg font-medium hover:bg-[#E63E00] transition-colors flex items-center justify-center ${isLoading ? 'opacity-75 cursor-not-allowed' : ''}`}
             disabled={isLoading}
           >
             {isLoading ? (

@@ -1,7 +1,7 @@
 import { useState } from "react";
 
 const variantStyles = {
-  primary: "bg-blue-600 hover:bg-blue-700 text-white",
+  primary: "bg-[#FF4B00] text-white hover:bg-[#e63f00] text-white",
   secondary: "bg-gray-600 hover:bg-gray-700 text-white",
   success: "bg-green-600 hover:bg-green-700 text-white",
   danger: "bg-red-600 hover:bg-red-700 text-white",

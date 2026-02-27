@@ -18,7 +18,7 @@ const Card = ({
   return (
     <div
       className={`
-        bg-white rounded-lg 
+        bg-[#f3f3f3] rounded-xl shadow-md p-10 
         ${border ? "border border-gray-200 dark:border-gray-700" : ""} 
         ${shadowMap[shadow]} 
         ${padding} 
