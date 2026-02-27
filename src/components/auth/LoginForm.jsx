@@ -3,6 +3,7 @@ import { useAuth } from '../../contexts/AuthContext';
 import { useNotifications } from '../../contexts/NotificationContext';
 import Input from '../common/Input';
 import Button from '../common/Button';
+import logo from "../../assets/logo.png";
 
 const LoginForm = ({ onSuccess }) => {
   const { login, loading } = useAuth();
@@ -157,10 +158,10 @@ const LoginForm = ({ onSuccess }) => {
         {/* Header with Logo */}
         <div className="text-center mb-8">
           <img 
-            src="/src/assets/logo.png" 
+            src={logo} 
             alt="Classroom Heat Monitor Logo"
             className="mx-auto mb-4 max-w-full h-auto"
-            style={{ maxHeight: '510px' }} // Adjust size as needed
+            style={{ maxHeight: '510px' }}
           />
         </div>
 
