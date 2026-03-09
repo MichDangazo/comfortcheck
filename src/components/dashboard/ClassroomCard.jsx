@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useCallback } from 'react';
 import { useLocalStorage } from '../../hooks/useLocalStorage';
 import { formatTemperature } from '../../utils/temperature';
 import Card from "../common/Card";
@@ -20,42 +20,53 @@ const ClassroomCard = ({ classroom }) => {
     temperatureUnit: 'celsius',
   });
 
-  const handleClick = () => {
-    console.log('Card clicked!', name);
+  const handleClick = useCallback(() => {
     setShowDetails(true);
-  };
+  }, []);
 
-  const handleClose = () => {
-    console.log('Closing modal');
+  const handleClose = useCallback(() => {
     setShowDetails(false);
-  };
+  }, []);
 
   return (
     <>
       <Card 
         onClick={handleClick}
-        className="dark:bg-gray-800"
+        className="classroom-card"
+        role="button"
+        tabIndex={0}
+        onKeyDown={(e) => {
+          if (e.key === 'Enter' || e.key === ' ') {
+            e.preventDefault();
+            handleClick();
+          }
+        }}
+        aria-label={`View details for ${name}`}
       >
-        <div className="flex justify-between items-start">
-          <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100">{name}</h3>
+        <div className="classroom-header">
+          <h3 className="classroom-name">{name}</h3>
           <Badge variant={config.variant} size="sm">
-            {config.icon} {config.label}
+            <span aria-hidden="true">{config.icon}</span> {config.label}
           </Badge>
         </div>
         
-        <div className="mt-3 space-y-2">
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600 dark:text-gray-400">🌡️ Temperature</span>
-            <span className="font-medium text-gray-900 dark:text-gray-100">
+        <div className="classroom-metrics">
+          <div className="metric-row">
+            <span className="metric-label">
+              <span aria-hidden="true">🌡️</span> Temperature
+            </span>
+            <span className="metric-value">
               {formatTemperature(temperature, preferences.temperatureUnit)}
             </span>
           </div>
-          <div className="flex justify-between items-center">
-            <span className="text-gray-600 dark:text-gray-400">💧 Humidity</span>
-            <span className="font-medium text-gray-900 dark:text-gray-100">{humidity}%</span>
+          <div className="metric-row">
+            <span className="metric-label">
+              <span aria-hidden="true">💧</span> Humidity
+            </span>
+            <span className="metric-value">{humidity}%</span>
           </div>
           
-          <div className="mt-2 text-xs text-blue-600 dark:text-blue-400 text-right">
+          <div className="classroom-hint">
             Click for details →
           </div>
         </div>

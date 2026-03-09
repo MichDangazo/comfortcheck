@@ -1,6 +1,7 @@
 const Input = ({
   label,
   type = 'text',
+  id,
   name,
   value,
   onChange,
@@ -10,34 +11,41 @@ const Input = ({
   required = false,
   disabled = false,
   className = '',
+  'aria-describedby': ariaDescribedBy,
+  'aria-required': ariaRequired,
   ...props
 }) => {
+  const inputId = id || name;
+  const describedBy = error ? `${inputId}-error` : ariaDescribedBy;
+  const isRequired = ariaRequired !== undefined ? ariaRequired : required;
+
   return (
-    <div className="mb-4">
+    <div className="input-group">
       {label && (
-        <label htmlFor={name} className="block text-sm font-medium text-gray-700 mb-1">
-          {label} {required && <span className="text-red-500">*</span>}
+        <label htmlFor={inputId} className="form-label">
+          {label} {isRequired && <span className="required" aria-label="required">*</span>}
         </label>
       )}
       <input
         type={type}
-        id={name}
+        id={inputId}
         name={name}
         value={value}
         onChange={onChange}
         onBlur={onBlur}
         placeholder={placeholder}
         disabled={disabled}
-        className={`
-          w-full px-3 py-2 border rounded-lg shadow-sm
-          focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-blue-500
-          ${error ? 'border-red-500' : 'border-gray-300'}
-          ${disabled ? 'bg-gray-100 cursor-not-allowed' : ''}
-          ${className}
-        `}
+        required={isRequired}
+        aria-describedby={describedBy}
+        aria-invalid={error ? 'true' : 'false'}
+        className={`input-field ${error ? 'error' : ''} ${disabled ? 'disabled' : ''} ${className}`}
         {...props}
       />
-      {error && <p className="mt-1 text-sm text-red-600">{error}</p>}
+      {error && (
+        <p id={`${inputId}-error`} className="input-error" role="alert">
+          {error}
+        </p>
+      )}
     </div>
   );
 };

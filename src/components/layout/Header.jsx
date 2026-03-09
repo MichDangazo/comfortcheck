@@ -2,16 +2,16 @@ import Button from "../common/Button";
 
 const Header = ({ title, lastUpdated, onRefresh, userRole = "Admin" }) => {
   return (
-    <header className="mb-8">
-      <div className="flex justify-between items-center">
+    <header className="header">
+      <div className="header-content">
         <div>
-          <h1 className="text-3xl font-bold text-gray-800">{title}</h1>
-          <p className="text-gray-600">
+          <h1 className="header-title">{title}</h1>
+          <p className="header-meta">
             Welcome back, <span className="font-medium">{userRole}</span>
           </p>
         </div>
-        <div className="flex items-center gap-4">
-          <div className="text-sm text-gray-500">
+        <div className="header-controls">
+          <div className="header-meta">
             Last updated: {lastUpdated.toLocaleTimeString()}
           </div>
           <Button 

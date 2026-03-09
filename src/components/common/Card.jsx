@@ -1,32 +1,32 @@
 const Card = ({ 
   children, 
   className = "", 
-  padding = "p-4", 
+  padding = "md", 
   shadow = "md", 
   border = true,
-  onClick,  // Make sure this is included
-  ...props  // Pass any other props
+  onClick,  
+  ...props  
 }) => {
   const shadowMap = {
-    none: "",
+    none: "shadow-none",
     sm: "shadow-sm",
-    md: "shadow-md",
+    md: "shadow",
     lg: "shadow-lg",
     xl: "shadow-xl",
   };
 
+  const paddingMap = {
+    sm: "card-sm",
+    md: "card-md",
+    lg: "card-lg",
+    xl: "card-xl",
+  };
+
   return (
     <div
-      className={`
-        bg-[#f3f3f3] rounded-xl shadow-md p-10 
-        ${border ? "border border-gray-200 dark:border-gray-700" : ""} 
-        ${shadowMap[shadow]} 
-        ${padding} 
-        ${className}
-        ${onClick ? 'cursor-pointer hover:shadow-lg transition-all' : ''}
-      `}
+      className={`card ${paddingMap[padding]} ${shadowMap[shadow]} ${border ? 'border' : 'border-0'} ${onClick ? 'card-hover cursor-pointer' : ''} ${className}`}
       onClick={onClick}
-      {...props}  // Spread remaining props
+      {...props}  
     >
       {children}
     </div>

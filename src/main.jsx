@@ -1,7 +1,14 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import './index.css'
+
+// Import CSS files in order of specificity
+import './styles/base.css'
+import './styles/utilities.css'
+import './styles/layout.css'
+import './styles/components.css'
+import './styles/auth.css'
+import './styles/dashboard.css'
 import './styles/animations.css'
 
 ReactDOM.createRoot(document.getElementById('root')).render(

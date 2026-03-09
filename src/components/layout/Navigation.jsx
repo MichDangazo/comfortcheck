@@ -13,7 +13,6 @@ const Navigation = () => {
 
   const navItems = [
     { path: '/', label: 'Dashboard', icon: '📊', roles: ['admin', 'facility_manager', 'teacher'] },
-    { path: '/rooms', label: 'Room Details', icon: '🏫', roles: ['admin', 'facility_manager', 'teacher'] },
     { path: '/devices', label: 'Device Health', icon: '📱', roles: ['admin', 'facility_manager'] },
     { path: '/settings', label: 'Settings', icon: '⚙️', roles: ['admin', 'facility_manager', 'teacher'] },
   ];
@@ -23,26 +22,23 @@ const Navigation = () => {
   );
 
   return (
-    <nav className="bg-white dark:bg-gray-800 shadow-md transition-colors">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="flex justify-between h-16">
-          <div className="flex space-x-8">
+    <nav className="navigation" role="navigation" aria-label="Main navigation">
+      <div className="navigation-container">
+        <div className="navigation-content">
+          <div className="navigation-links">
             {filteredNavItems.map(item => (
               <NavLink
                 key={item.path}
                 to={item.path}
                 className={({ isActive }) =>
-                  `inline-flex items-center px-3 py-2 text-sm font-medium border-b-2 transition-colors ${
-                    isActive
-                      ? 'border-blue-500 text-blue-600 dark:text-blue-400'
-                      : 'border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600'
-                  }`
+                  `navigation-link ${isActive ? 'active' : ''}`
                 }
+                aria-current={({ isActive }) => isActive ? 'page' : undefined}
               >
-                <span className="mr-2">{item.icon}</span>
+                <span className="navigation-link-icon" aria-hidden="true">{item.icon}</span>
                 {item.label}
                 {item.path === '/' && unreadCount > 0 && (
-                  <Badge variant="danger" size="sm" className="ml-2">
+                  <Badge variant="danger" size="sm" className="navigation-badge" aria-label={`${unreadCount} unread notifications`}>
                     {unreadCount}
                   </Badge>
                 )}
@@ -50,29 +46,29 @@ const Navigation = () => {
             ))}
           </div>
 
-          <div className="flex items-center space-x-4">
-            {/* Theme Toggle */}
+          <div className="navigation-controls">
             <button
               onClick={toggleTheme}
-              className="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors"
+              className="theme-toggle"
               title={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
+              aria-label={`Switch to ${theme === 'light' ? 'dark' : 'light'} mode`}
             >
-              {theme === 'light' ? '🌙' : '☀️'}
+              <span className="text-xl" aria-hidden="true">{theme === 'light' ? '🌙' : '☀️'}</span>
             </button>
 
-            <div className="flex items-center space-x-2">
-              <span className="text-2xl">{user?.avatar}</span>
-              <div className="text-sm">
-                <p className="font-medium text-gray-900 dark:text-gray-100">{user?.name}</p>
-                <p className="text-gray-500 dark:text-gray-400 capitalize">{user?.role?.replace('_', ' ')}</p>
+            <div className="user-info">
+              <span className="user-avatar" aria-hidden="true">{user?.avatar}</span>
+              <div className="user-details">
+                <p className="user-name">{user?.name}</p>
+                <p className="user-role">{user?.role?.replace('_', ' ')}</p>
               </div>
             </div>
             <button
               onClick={logout}
-              className="text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              className="logout-button"
+              aria-label="Logout"
             >
-              <span className="sr-only">Logout</span>
-              <span>🚪</span>
+              <span className="text-xl" aria-hidden="true">🚪</span>
             </button>
           </div>
         </div>

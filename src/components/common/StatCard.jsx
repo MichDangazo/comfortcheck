@@ -12,29 +12,38 @@ const StatCard = ({
   className = ""
 }) => {
   const colorClasses = {
-    blue: "bg-blue-50 text-blue-700",
-    green: "bg-green-50 text-green-700",
-    yellow: "bg-yellow-50 text-yellow-700",
-    red: "bg-red-50 text-red-700",
+    blue: "stat-card-blue",
+    green: "stat-card-green",
+    yellow: "stat-card-yellow",
+    red: "stat-card-red",
   };
 
   return (
     <Card 
-      className={`hover:shadow-lg transition-shadow cursor-pointer ${className}`}
+      className={`stat-card ${className}`}
       onClick={onClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onClick?.();
+        }
+      }}
+      aria-label={`Filter by ${title}`}
     >
-      <div className="flex items-start justify-between">
+      <div className="stat-content">
         <div>
-          <p className="text-sm text-gray-600">{title}</p>
-          <p className="text-2xl font-bold mt-1">{value}</p>
+          <p className="stat-title">{title}</p>
+          <p className="stat-value">{value}</p>
           {trend && (
-            <p className={`text-sm mt-2 ${trendDirection === "up" ? "text-green-600" : "text-red-600"}`}>
+            <p className={`stat-trend ${trendDirection === "up" ? "trend-up" : "trend-down"}`}>
               {trendDirection === "up" ? "↑" : "↓"} {trend}
             </p>
           )}
         </div>
         {icon && (
-          <div className={`p-3 rounded-full ${colorClasses[color]}`}>
+          <div className={`stat-icon ${colorClasses[color]}`} aria-hidden="true">
             {icon}
           </div>
         )}

@@ -32,7 +32,7 @@ const SummaryStats = ({ counts, onStatClick }) => {
   ];
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-3 gap-4 mb-8">
+    <section className="summary-stats" aria-label="Summary Statistics">
       {stats.map((stat) => (
         <StatCard
           key={stat.filter}
@@ -40,7 +40,7 @@ const SummaryStats = ({ counts, onStatClick }) => {
           onClick={() => onStatClick?.(stat.filter)}
         />
       ))}
-    </div>
+    </section>
   );
 };
 

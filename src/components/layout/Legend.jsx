@@ -10,9 +10,9 @@ const Legend = ({ items = [] }) => {
   const legendItems = items.length ? items : defaultItems;
 
   return (
-    <div className="mt-8 flex flex-wrap gap-4 text-xs">
+    <div className="legend">
       {legendItems.map((item, index) => (
-        <div key={index} className="flex items-center gap-2">
+        <div key={index} className="legend-item">
           <span>{item.icon}</span>
           <Badge variant={item.badge} size="sm">
             {item.label}
